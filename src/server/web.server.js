@@ -1,14 +1,19 @@
-const express = require('express')
+const express = require('express');
+
 export default class WebServer {
-  constructor () {
-    this.app = express()
-    this.app.use(express.static('dist/public'))
+  constructor() {
+    this.app = express();
   }
-  start () {
+  
+  start() {
+    const port = process.env.PORT || 3000;
+    this.app.use(express.static('dist/public'));
+    
     return new Promise((resolve, reject) => {
       try {
-        this.server = this.app.listen(3000, function () {
-          resolve()
+        this.server = this.app.listen(port, () => {
+          console.log("Express server listening on port " + port);
+          resolve();
         })
       } catch (e) {
         console.error(e)
@@ -16,7 +21,8 @@ export default class WebServer {
       }
     })
   }
-  stop () {
+
+  stop() {
     return new Promise((resolve, reject) => {
       try {
         this.server.close(() => {
